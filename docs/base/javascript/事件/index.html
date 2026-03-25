@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>JS 事件对象 Demo</title>
+    <style>
+      body {
+        margin: 0;
+        padding: 24px;
+        font-family: "PingFang SC", "Microsoft YaHei", sans-serif;
+        background: #f7fafc;
+        color: #0f172a;
+      }
+
+      h1 {
+        margin: 0 0 10px;
+        font-size: 24px;
+      }
+
+      p {
+        margin: 0 0 16px;
+        color: #475569;
+      }
+
+      .panel {
+        background: #fff;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 12px;
+        margin-bottom: 12px;
+      }
+
+      .pointer-area {
+        height: 80px;
+        border: 1px dashed #94a3b8;
+        border-radius: 8px;
+        display: grid;
+        place-items: center;
+        user-select: none;
+      }
+
+      #card {
+        border: 1px solid #cbd5e1;
+        border-radius: 8px;
+        padding: 10px;
+      }
+
+      #log {
+        margin-top: 8px;
+        min-height: 140px;
+        max-height: 260px;
+        overflow: auto;
+        border-radius: 8px;
+        border: 1px solid #e2e8f0;
+        background: #f8fafc;
+        padding: 10px;
+        font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+          "Liberation Mono", "Courier New", monospace;
+        font-size: 13px;
+      }
+
+      #log div {
+        padding: 4px 0;
+        border-bottom: 1px solid #eef2f7;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>JavaScript 事件对象（Event）示例</h1>
+    <p>在下面交互，并观察日志区域输出。</p>
+
+    <section class="panel">
+      <strong>1) 事件委托（target / currentTarget）</strong>
+      <ul id="todoList">
+        <li>任务 1 <button data-id="1">删除</button></li>
+        <li>任务 2 <button data-id="2">删除</button></li>
+        <li>任务 3 <button data-id="3">删除</button></li>
+      </ul>
+    </section>
+
+    <section class="panel">
+      <strong>2) preventDefault 阻止默认行为</strong><br />
+      <a id="jumpLink" href="https://example.com" target="_blank"
+        >这是一个默认会跳转的链接</a
+      >
+    </section>
+
+    <section class="panel">
+      <strong>3) stopPropagation 阻止冒泡</strong>
+      <div id="card">
+        卡片区域（点击按钮时不触发卡片点击）
+        <button id="buyBtn">加入购物车</button>
+      </div>
+    </section>
+
+    <section class="panel">
+      <strong>4) key / code 键盘事件</strong><br />
+      <input
+        id="searchInput"
+        placeholder="输入内容后按 Enter"
+        autocomplete="off"
+      />
+    </section>
+
+    <section class="panel">
+      <strong>5) clientX / pageX 坐标</strong>
+      <div id="pointerArea" class="pointer-area">在这里点击或触控</div>
+    </section>
+
+    <section class="panel">
+      <strong>6) CustomEvent 自定义事件</strong><br />
+      <button id="dispatchCustom">触发 cart:add 事件</button>
+    </section>
+
+    <section class="panel">
+      <strong>日志输出</strong>
+      <div id="log"></div>
+    </section>
+
+    <script src="./index.js"></script>
+  </body>
+</html>
