@@ -1,67 +1,51 @@
-name: Deploy VitePress site to Pages
+# 将静态内容部署到 GitHub Pages 的简易工作流程
+name: Deploy static content to Pages
 
 on:
+  # 仅在推送到默认分支时运行。
   push:
-    branches: [main]
+    branches: ['main']
+
+  # 这个选项可以使你手动在 Action tab 页面触发工作流
   workflow_dispatch:
 
+# 设置 GITHUB_TOKEN 的权限，以允许部署到 GitHub Pages。
 permissions:
   contents: read
   pages: write
   id-token: write
 
+# 允许一个并发的部署
 concurrency:
-  group: pages
-  cancel-in-progress: false
+  group: 'pages'
+  cancel-in-progress: true
 
 jobs:
-  build:
+  # 单次部署的工作描述
+  deploy:
+    environment:
+      name: wen.yao
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
-      # 1️⃣ Checkout 仓库
-      - name: Checkout repository
-        uses: actions/checkout@v6
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Node
+        uses: actions/setup-node@v4
         with:
-          fetch-depth: 0
-
-      # 2️⃣ 安装 Node 20.20.1（精确版本）
-      - name: Setup Node
-        uses: actions/setup-node@v6
-        with:
-          node-version: 20.20.1
+          node-version: 22
           cache: 'npm'
-
-      # 3️⃣ 升级 npm 到 10.x
-      - name: Upgrade npm
-        run: npm install -g npm@10
-
-      # 4️⃣ 清理缓存（可选，避免偶发问题）
-      - name: Clear npm cache
-        run: npm cache clean --force
-
-      # 5️⃣ 安装依赖
       - name: Install dependencies
         run: npm ci
-
-      # 6️⃣ 构建 VitePress
-      - name: Build VitePress
-        run: npm run docs:build
-
-      # 7️⃣ 上传构建产物
-      - name: Upload Pages artifact
+      - name: Build
+        run: npm run build
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: docs/.vitepress/dist
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: wen.yao           # 你在 GitHub 上创建的环境
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
+          # Upload dist folder
+          path: './dist'
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-        with:
-          enablement: true       # 首次部署自动启用 Pages
