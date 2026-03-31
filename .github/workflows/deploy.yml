@@ -24,26 +24,30 @@ jobs:
         with:
           fetch-depth: 0
 
-      # 2️⃣ 安装 Node
+      # 2️⃣ Setup Node
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
           node-version: 20.20
-          cache: 'yarn'
+          cache: 'npm'
 
-      # 3️⃣ 安装 Yarn
-      - name: Setup Yarn
-        run: npm install -g yarn
+      # 3️⃣ 升级 npm 避免 Exit handler
+      - name: Upgrade npm
+        run: npm install -g npm@10
 
-      # 4️⃣ 安装依赖
+      # 4️⃣ 可选清理缓存
+      - name: Clear npm cache
+        run: npm cache clean --force
+
+      # 5️⃣ 安装依赖
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: npm ci
 
-      # 5️⃣ 构建 VitePress
+      # 6️⃣ 构建 VitePress
       - name: Build VitePress
-        run: yarn docs:build
+        run: npm run docs:build
 
-      # 6️⃣ 上传构建产物
+      # 7️⃣ 上传构建产物
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
