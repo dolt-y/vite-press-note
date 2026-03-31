@@ -18,27 +18,29 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+      # 1️⃣ Checkout 仓库
+      - name: Checkout repository
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
+      # 2️⃣ 安装 Node
       - name: Setup Node
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v6
         with:
-          node-version: 20
-          cache: 'pnpm'
+          node-version: 22
+          cache: 'npm'
 
-      - name: Install pnpm via corepack
-        run: corepack enable && corepack prepare pnpm@9 --activate
-
+      # 3️⃣ 安装依赖
       - name: Install dependencies
-        run: pnpm install
+        run: npm install --frozen-lockfile
 
-      - name: Build with VitePress
-        run: pnpm docs:build
+      # 4️⃣ 构建 VitePress
+      - name: Build VitePress
+        run: npm run docs:build
 
-      - name: Upload artifact
+      # 5️⃣ 上传构建产物
+      - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: docs/.vitepress/dist
@@ -47,7 +49,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     environment:
-      name: wen.yao
+      name: wen.yao           # 你自定义的环境
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Deploy to GitHub Pages
