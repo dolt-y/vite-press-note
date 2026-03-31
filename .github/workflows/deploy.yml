@@ -18,28 +18,26 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-      # 1️⃣ Checkout 仓库
       - name: Checkout repository
         uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
-      # 2️⃣ 安装 Node
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
           node-version: 22
           cache: 'npm'
 
-      # 3️⃣ 安装依赖
-      - name: Install dependencies
-        run: npm install --frozen-lockfile
+      - name: Upgrade npm
+        run: npm install -g npm@10
 
-      # 4️⃣ 构建 VitePress
+      - name: Install dependencies
+        run: npm ci
+
       - name: Build VitePress
         run: npm run docs:build
 
-      # 5️⃣ 上传构建产物
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
@@ -49,7 +47,7 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     environment:
-      name: wen.yao           # 你自定义的环境
+      name: wen.yao
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - name: Deploy to GitHub Pages
