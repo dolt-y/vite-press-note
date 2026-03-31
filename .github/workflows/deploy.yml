@@ -24,18 +24,18 @@ jobs:
         with:
           fetch-depth: 0
 
-      # 2️⃣ Setup Node
+      # 2️⃣ Setup Node 20.20
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
           node-version: 20.20
           cache: 'npm'
 
-      # 3️⃣ 升级 npm 避免 Exit handler
+      # 3️⃣ 升级 npm 到 10.x，兼容 Node 20.20
       - name: Upgrade npm
         run: npm install -g npm@10
 
-      # 4️⃣ 可选清理缓存
+      # 4️⃣ 可选：清理缓存，避免偶发错误
       - name: Clear npm cache
         run: npm cache clean --force
 
@@ -64,4 +64,4 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
         with:
-          enablement: true      # 自动启用 Pages
+          enablement: true      # 首次部署自动启用 Pages
