@@ -24,18 +24,18 @@ jobs:
         with:
           fetch-depth: 0
 
-      # 2️⃣ 安装 Node 20.20
+      # 2️⃣ 安装 Node 20.20.1（精确版本）
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
-          node-version: 20.20   # 明确指定 Node 版本
+          node-version: 20.20.1
           cache: 'npm'
 
       # 3️⃣ 升级 npm 到 10.x
       - name: Upgrade npm
         run: npm install -g npm@10
 
-      # 4️⃣ 清理 npm 缓存（可选，避免偶发问题）
+      # 4️⃣ 清理缓存（可选，避免偶发问题）
       - name: Clear npm cache
         run: npm cache clean --force
 
@@ -64,4 +64,4 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
         with:
-          enablement: true      # 首次部署自动启用 Pages
+          enablement: true       # 首次部署自动启用 Pages
