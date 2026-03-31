@@ -28,20 +28,20 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v6
         with:
-          node-version: 22
-          cache: 'npm'
+          node-version: 20.20
+          cache: 'yarn'
 
-      # 3️⃣ 升级 npm 避免 Exit handler 问题
-      - name: Upgrade npm
-        run: npm install -g npm@10
+      # 3️⃣ 安装 Yarn
+      - name: Setup Yarn
+        run: npm install -g yarn
 
       # 4️⃣ 安装依赖
       - name: Install dependencies
-        run: npm ci
+        run: yarn install --frozen-lockfile
 
       # 5️⃣ 构建 VitePress
       - name: Build VitePress
-        run: npm run docs:build
+        run: yarn docs:build
 
       # 6️⃣ 上传构建产物
       - name: Upload Pages artifact
@@ -60,4 +60,4 @@ jobs:
         id: deployment
         uses: actions/deploy-pages@v4
         with:
-          enablement: true      # 自动启用 Pages（首次部署可用）
+          enablement: true      # 自动启用 Pages
